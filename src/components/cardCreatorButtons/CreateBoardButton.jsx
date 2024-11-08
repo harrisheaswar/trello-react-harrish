@@ -1,5 +1,5 @@
-import React from "react";
-import { handleCreateBoard } from "../../utils/handleCreateBoard";
+import { createNewBoard } from "../../services/apiCalls";
+import { toast } from "react-toastify";
 import {
   CardContent,
   Typography,
@@ -9,6 +9,15 @@ import {
 } from "@mui/material";
 
 const CreateBoardButton = ({ setIsEditing, isEditing, boardsUpdate }) => {
+  const handleCreateBoard = async (boardName) => {
+    try {
+      let newBoard = await createNewBoard(boardName);
+      boardsUpdate((prev) => [...prev, newBoard]);
+    } catch (err) {
+      toast.error("Error could not create new board");
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -40,7 +49,7 @@ const CreateBoardButton = ({ setIsEditing, isEditing, boardsUpdate }) => {
             onSubmit={(e) => {
               setIsEditing(false);
               e.preventDefault();
-              handleCreateBoard(e.target.boardName.value, boardsUpdate);
+              handleCreateBoard(e.target.boardName.value);
             }}
           >
             <TextField

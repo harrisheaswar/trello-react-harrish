@@ -1,4 +1,3 @@
-import React from "react";
 import {
   CardContent,
   Typography,
@@ -6,8 +5,19 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { handleCreateList } from "../../utils/handleCreateList";
+import { toast } from "react-toastify";
+import { createNewList } from "../../services/apiCalls";
+
 const CreateListButton = ({ setIsEditing, isEditing, listsUpdate, lists }) => {
+  const handleCreateList = async (e) => {
+    try {
+      const newList = await createNewList(lists[0], e.target.listName.value);
+      listsUpdate((prevLists) => [...prevLists, newList]);
+    } catch (err) {
+      toast.error("Error: Could not create new list");
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -33,8 +43,9 @@ const CreateListButton = ({ setIsEditing, isEditing, listsUpdate, lists }) => {
         <CardContent>
           <form
             onSubmit={(e) => {
+              e.preventDefault();
               setIsEditing(false);
-              handleCreateList(e, listsUpdate, lists);
+              handleCreateList(e);
             }}
           >
             <TextField

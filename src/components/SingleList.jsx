@@ -1,21 +1,30 @@
-import React from "react";
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import { fetchCards } from "../utils/fetchCards";
+import { toast } from "react-toastify";
 import SingleCard from "./SingleCard";
-
+import { fetchCards } from "../services/apiCalls";
 import CreateCardButton from "./cardCreatorButtons/CreateCardButton";
-import { archiveList } from "../utils/archiveList";
+import { archiveListById } from "../services/apiCalls";
+
 const SingleList = ({ list, setLists }) => {
   const [cards, setCards] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
+
   useEffect(() => {
-    fetchCards(list.id, setCards);
+    const fetchAndSetCards = async () => {
+      try {
+        let cardsData = await fetchCards(list.id);
+        setCards(cardsData);
+      } catch (err) {
+        toast.error("Error could not fetch cards for the given list", err);
+      }
+    };
+    fetchAndSetCards();
   }, [list.id]);
 
-  const archiveTheList = (e) => {
+  const handleArchiveList = async (e) => {
     setLists((prev) => prev.filter((item) => item.id != e.target.id));
-    archiveList(e.target.id);
+    await archiveListById(e.target.id);
   };
 
   return (
@@ -56,7 +65,7 @@ const SingleList = ({ list, setLists }) => {
             }}
             id={list.id}
             onClick={(e) => {
-              archiveTheList(e);
+              handleArchiveList(e);
             }}
           >
             -

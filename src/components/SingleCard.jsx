@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -10,11 +10,12 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
+import { toast } from "react-toastify";
 
 import SingleChecklist from "./SingleChecklist";
-import { fetchCheckLists } from "../utils/fetchCheckLists";
+import { fetchChecklists } from "../services/apiCalls";
 import CreateChecklistButton from "./cardCreatorButtons/CreateChecklistButton";
-import { deleteCard } from "../utils/deleteCard";
+import { deleteCardById } from "../services/apiCalls";
 
 const SingleCard = ({ card, setCards }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,18 +23,20 @@ const SingleCard = ({ card, setCards }) => {
   const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
-    fetchCheckLists(card.id, setCheckLists);
+    fetchChecklists(card.id);
   }, [card.id]);
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = async () => {
     setIsOpen(true);
-    fetchCheckLists(card.id, setCheckLists);
+    const checkListData = await fetchChecklists(card.id);
+    setCheckLists(checkListData);
   };
   const handleCloseDialog = () => setIsOpen(false);
 
-  const handleDeleteCard = (e) => {
+  const handleDeleteCard = async (e) => {
     setCards((prev) => prev.filter((item) => item.id != e.target.id));
-    deleteCard(e.target.id);
+    toast.success("Card deleted");
+    await deleteCardById(e.target.id);
   };
 
   return (
@@ -73,7 +76,10 @@ const SingleCard = ({ card, setCards }) => {
                 },
               }}
               id={card.id}
-              onClick={handleDeleteCard}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteCard(e);
+              }}
             >
               x
             </Button>

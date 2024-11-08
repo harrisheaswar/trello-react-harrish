@@ -1,7 +1,16 @@
-import React from "react";
+import { toast } from "react-toastify";
 import { ButtonBase, Box, TextField, Button } from "@mui/material";
-import { addNewCard } from "../../utils/addNewCard";
+import { createNewCard } from "../../services/apiCalls";
 const CreateCardButton = ({ isAdding, setIsAdding, setCards, list }) => {
+  const handleAddNewCard = async (e) => {
+    try {
+      let newCard = await createNewCard(e.target.cardName.value, list);
+      setCards((prev) => [...prev, newCard]);
+      setIsAdding(false);
+    } catch (err) {
+      toast.error("Error: Could not create card");
+    }
+  };
   return (
     <div>
       {!isAdding && (
@@ -41,8 +50,7 @@ const CreateCardButton = ({ isAdding, setIsAdding, setCards, list }) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              addNewCard(e.target.cardName.value, list.id, setCards);
-              setIsAdding(false);
+              handleAddNewCard(e);
             }}
           >
             <TextField

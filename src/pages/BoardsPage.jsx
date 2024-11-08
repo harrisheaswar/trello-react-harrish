@@ -1,4 +1,3 @@
-import React from "react";
 import BoardsList from "../components/BoardsList";
 
 const BoardsPage = ({ boards, boardsUpdate, listsUpdate, lists }) => {

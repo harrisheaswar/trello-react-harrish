@@ -5,11 +5,13 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { fetchBoards } from "./utils/fetchBoards";
+import { toast } from "react-toastify";
+import { fetchBoards } from "./services/apiCalls";
 import BoardsPage from "./pages/BoardsPage";
 import MainLayout from "./layouts/MainLayout";
 import ListsPage from "./pages/ListsPage";
 import PageNotFound from "./pages/PageNotFound";
+
 function App() {
   const [boards, setBoards] = useState([]);
   const [lists, setLists] = useState([]);
@@ -21,10 +23,19 @@ function App() {
   const listsUpdate = (newList) => {
     setLists(newList);
   };
-  useEffect(() => {
-    fetchBoards(boardsUpdate, boards);
-  }, [boards]);
 
+  useEffect(() => {
+    const fetchAndSetBoards = async () => {
+      try {
+        const boardsData = await fetchBoards();
+        setBoards(boardsData);
+      } catch (err) {
+        toast.error("Error: Could not fetch boards");
+      }
+    };
+
+    fetchAndSetBoards();
+  }, []);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>

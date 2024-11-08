@@ -5,11 +5,13 @@ import {
   LinearProgress,
   Button,
 } from "@mui/material";
-import React, { useState } from "react";
-import { updateChecklistItem } from "../utils/updateChecklistItem";
-import { deleteChecklist } from "../utils/deleteChecklist";
+import { useState } from "react";
+import { updateChecklistItemById } from "../services/apiCalls";
+import { deleteChecklistById } from "../services/apiCalls";
 import CreateChecklistItemButton from "./cardCreatorButtons/CreateChecklistItemButton";
-import { deleteChecklistItem } from "../utils/deleteChecklistItem";
+import { deleteChecklistItemById } from "../services/apiCalls";
+import { toast } from "react-toastify";
+
 const SingleChecklist = ({ checklist, setCheckLists }) => {
   const [checkItems, setCheckItems] = useState(checklist.checkItems);
   const [isAdding, setIsAdding] = useState(false);
@@ -31,7 +33,7 @@ const SingleChecklist = ({ checklist, setCheckLists }) => {
           const newState =
             item.state === "complete" ? "incomplete" : "complete";
 
-          updateChecklistItem(itemId, newState, checklist);
+          updateChecklistItemById(itemId, newState, checklist);
           return {
             ...item,
             state: newState,
@@ -44,12 +46,14 @@ const SingleChecklist = ({ checklist, setCheckLists }) => {
 
   const handleDeleteChecklist = (e) => {
     setCheckLists((prev) => prev.filter((item) => item.id != e.target.id));
-    deleteChecklist(e.target.id);
+    toast.success("Checklist deleted");
+    deleteChecklistById(e.target.id);
   };
 
   const handleDeleteChecklistItem = (e) => {
     setCheckItems((prev) => prev.filter((item) => item.id != e.target.id));
-    deleteChecklistItem(checklist.id, e.target.id);
+    toast.success("ChecklistItem deleted");
+    deleteChecklistItemById(checklist.id, e.target.id);
   };
 
   return (

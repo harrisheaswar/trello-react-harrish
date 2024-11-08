@@ -1,12 +1,26 @@
-import React from "react";
-import { addNewChecklistItem } from "../../utils/addNewChecklistItem";
 import { Box, TextField, Button } from "@mui/material";
+import { toast } from "react-toastify";
+import { createNewChecklistItem } from "../../services/apiCalls";
+
 const CreateChecklistItemButton = ({
   isAdding,
   setIsAdding,
   setCheckItems,
   checklist,
 }) => {
+  const handleNewChecklistItem = async (e) => {
+    try {
+      let newChecklistItem = await createNewChecklistItem(
+        e.target.checklistItemName.value,
+        checklist.id
+      );
+      setCheckItems((prev) => [...prev, newChecklistItem]);
+      setIsAdding(false);
+    } catch (err) {
+      toast.error("Error: Could not create new checklist item");
+    }
+  };
+
   return (
     <>
       {!isAdding && (
@@ -46,12 +60,7 @@ const CreateChecklistItemButton = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-
-              addNewChecklistItem(
-                e.target.checklistItemName.value,
-                checklist.id,
-                setCheckItems
-              );
+              handleNewChecklistItem(e);
               setIsAdding(false);
             }}
           >

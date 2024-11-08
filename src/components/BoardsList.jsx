@@ -1,18 +1,35 @@
-import React from "react";
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CreateBoardButton from "./cardCreatorButtons/CreateBoardButton";
 import { useNavigate } from "react-router-dom";
-import { fetchLists } from "../utils/fetchLists";
-import { deleteBoard } from "../utils/deleteBoard";
+import { fetchLists } from "../services/apiCalls";
+import { toast } from "react-toastify";
+import { deleteBoardById } from "../services/apiCalls";
 const BoardsList = ({ boardsUpdate, boards, setLists }) => {
   const navigate = useNavigate();
-  const [boardId, setBoardId] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    fetchLists(boardId, setLists);
-  }, [boardId]);
+  const fetchAndSetLists = async (boardId) => {
+    try {
+      let allLists = await fetchLists(boardId);
+
+      setLists(allLists);
+      navigate(`/boards/${boardId}`);
+    } catch (err) {
+      toast.error("Error: Could not fetch lists for the given board", err);
+    }
+  };
+
+  const handleDeleteBoard = async (boardId) => {
+    try {
+      await deleteBoardById(boardId);
+      let updatedBoards = boards.filter((board) => board.id != boardId);
+      boardsUpdate(updatedBoards);
+      toast.success("Deleted board");
+    } catch (err) {
+      toast.error("Error could not delete board", err);
+    }
+  };
 
   return (
     <Box
@@ -53,9 +70,7 @@ const BoardsList = ({ boardsUpdate, boards, setLists }) => {
             }}
             onClick={(e) => {
               e.preventDefault();
-              setBoardId(board.id);
-              fetchLists(board.id, setLists);
-              navigate(`/boards/${board.id}`);
+              fetchAndSetLists(board.id);
             }}
           >
             <Card
@@ -92,15 +107,10 @@ const BoardsList = ({ boardsUpdate, boards, setLists }) => {
                     color: "black",
                     top: 8,
                     right: 0,
-                    "&:hover": {
-                      color: "black",
-
-                      background: "none",
-                    },
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    deleteBoard(board.id);
+                    handleDeleteBoard(board.id);
                   }}
                 >
                   x

@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Button } from "@mui/material";
+/* eslint-disable react/prop-types */
+import { Box } from "@mui/material";
 import { useState } from "react";
 
 import SingleList from "./SingleList";

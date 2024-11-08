@@ -1,12 +1,26 @@
 import { TextField, Box, Button } from "@mui/material";
-import React from "react";
-import { addNewChecklist } from "../../utils/addNewChecklist";
+import { createNewChecklist } from "../../services/apiCalls";
+import { toast } from "react-toastify";
+
 const CreateChecklistButton = ({
   isAdding,
   setIsAdding,
   setCheckLists,
   card,
 }) => {
+  const handleAddNewChecklist = async (e) => {
+    try {
+      let newChecklist = await createNewChecklist(
+        e.target.checklistName.value,
+        card.id
+      );
+      setCheckLists((prev) => [...prev, newChecklist]);
+      setIsAdding(false);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error: Could not create new checklist");
+    }
+  };
   return (
     <Box
       sx={{
@@ -54,13 +68,7 @@ const CreateChecklistButton = ({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-
-              addNewChecklist(
-                e.target.checklistName.value,
-                card.id,
-                setCheckLists
-              );
-              setIsAdding(false);
+              handleAddNewChecklist(e);
             }}
           >
             <TextField
