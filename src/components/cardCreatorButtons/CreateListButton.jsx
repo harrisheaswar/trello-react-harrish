@@ -13,7 +13,8 @@ const CreateListButton = ({ setIsEditing, isEditing, listsUpdate, lists }) => {
     try {
       const newList = await createNewList(lists[0], e.target.listName.value);
       listsUpdate((prevLists) => [...prevLists, newList]);
-    } catch (err) {
+      toast.success("New list created");
+    } catch {
       toast.error("Error: Could not create new list");
     }
   };

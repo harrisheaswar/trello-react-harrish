@@ -15,8 +15,8 @@ const BoardsList = ({ boardsUpdate, boards, setLists }) => {
 
       setLists(allLists);
       navigate(`/boards/${boardId}`);
-    } catch (err) {
-      toast.error("Error: Could not fetch lists for the given board", err);
+    } catch {
+      toast.error("Error: Could not fetch lists for the given board");
     }
   };
 
@@ -26,8 +26,8 @@ const BoardsList = ({ boardsUpdate, boards, setLists }) => {
       let updatedBoards = boards.filter((board) => board.id != boardId);
       boardsUpdate(updatedBoards);
       toast.success("Deleted board");
-    } catch (err) {
-      toast.error("Error could not delete board", err);
+    } catch {
+      toast.error("Error could not delete board");
     }
   };
 

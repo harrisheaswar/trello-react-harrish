@@ -15,8 +15,8 @@ const SingleList = ({ list, setLists }) => {
       try {
         let cardsData = await fetchCards(list.id);
         setCards(cardsData);
-      } catch (err) {
-        toast.error("Error could not fetch cards for the given list", err);
+      } catch {
+        toast.error("Error could not fetch cards for the given list");
       }
     };
     fetchAndSetCards();

@@ -16,7 +16,7 @@ const CreateChecklistItemButton = ({
       );
       setCheckItems((prev) => [...prev, newChecklistItem]);
       setIsAdding(false);
-    } catch (err) {
+    } catch {
       toast.error("Error: Could not create new checklist item");
     }
   };

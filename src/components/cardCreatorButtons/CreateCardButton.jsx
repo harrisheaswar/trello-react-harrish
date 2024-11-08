@@ -6,8 +6,9 @@ const CreateCardButton = ({ isAdding, setIsAdding, setCards, list }) => {
     try {
       let newCard = await createNewCard(e.target.cardName.value, list);
       setCards((prev) => [...prev, newCard]);
+      toast.success("New Card created");
       setIsAdding(false);
-    } catch (err) {
+    } catch {
       toast.error("Error: Could not create card");
     }
   };

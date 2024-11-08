@@ -13,7 +13,8 @@ const CreateBoardButton = ({ setIsEditing, isEditing, boardsUpdate }) => {
     try {
       let newBoard = await createNewBoard(boardName);
       boardsUpdate((prev) => [...prev, newBoard]);
-    } catch (err) {
+      toast.success("Created a new board");
+    } catch {
       toast.error("Error could not create new board");
     }
   };

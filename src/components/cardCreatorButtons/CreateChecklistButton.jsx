@@ -15,9 +15,9 @@ const CreateChecklistButton = ({
         card.id
       );
       setCheckLists((prev) => [...prev, newChecklist]);
+      toast.success("New Checklist created");
       setIsAdding(false);
-    } catch (err) {
-      console.log(err);
+    } catch {
       toast.error("Error: Could not create new checklist");
     }
   };
