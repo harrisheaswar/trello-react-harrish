@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchLists } from "../services/apiCalls";
 import { toast } from "react-toastify";
 import { deleteBoardById } from "../services/apiCalls";
+
 const BoardsList = ({ boardsUpdate, boards, setLists }) => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);

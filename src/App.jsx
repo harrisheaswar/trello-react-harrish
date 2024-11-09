@@ -29,7 +29,7 @@ function App() {
       try {
         const boardsData = await fetchBoards();
         setBoards(boardsData);
-      } catch (err) {
+      } catch {
         toast.error("Error: Could not fetch boards");
       }
     };

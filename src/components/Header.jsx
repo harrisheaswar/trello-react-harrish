@@ -1,4 +1,3 @@
-import React from "react";
 import { AppBar, Box, Toolbar, Button } from "@mui/material";
 import TrelloLogo from "../assets/Trello-logo.png";
 import { useNavigate } from "react-router-dom";

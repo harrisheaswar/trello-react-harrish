@@ -1,4 +1,3 @@
-import React from "react";
 import AllLists from "../components/AllLists";
 const ListsPage = ({ lists, listsUpdate }) => {
   return <AllLists lists={lists} listsUpdate={listsUpdate} />;
