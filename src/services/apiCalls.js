@@ -109,6 +109,5 @@ export async function deleteChecklistItemById(checklistId, checklistItemId) {
 
 export async function updateChecklistItemById(itemId, newState, checklist) {
   let url = `${config.baseChecklistsUrl}/${checklist.idCard}/checkItem/${itemId}?key=${config.key}&token=${config.token}`;
-  console.log(url);
   await updateChecklistItem(url, newState);
 }
